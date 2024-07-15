@@ -19,7 +19,7 @@ public class DadoUsuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_dado;
 
-    // Relacionamento com tabela de usuarios
+    @Column(name = "id_usuario")
     private Long id_usuario;
 
     @Column(name = "taxa_metabolica")

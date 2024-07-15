@@ -9,7 +9,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequestMapping("/api/usuario")
@@ -17,10 +19,12 @@ public class UsuarioController {
 
     private final UsuarioService service;
     private final UsuarioRepository repository;
+    private final PasswordEncoder encoder;
 
-    public UsuarioController(UsuarioService service, UsuarioRepository repository) {
+    public UsuarioController(UsuarioService service, UsuarioRepository repository, PasswordEncoder encoder) {
         this.service = service;
         this.repository = repository;
+        this.encoder = encoder;
     }
 
     @GetMapping("{id}")
@@ -61,7 +65,7 @@ public class UsuarioController {
 
                 usuario.setName(dto.getNome());
                 usuario.setEmail(dto.getEmail());
-                usuario.setSenha(dto.getSenha());
+                usuario.setSenha(encoder.encode(dto.getSenha()));
 
                 service.atualizarUsuario(usuario);
                 return ResponseEntity.ok(usuario);
@@ -85,7 +89,7 @@ public class UsuarioController {
         usuario.setId(dto.getId());
         usuario.setName(dto.getNome());
         usuario.setEmail(dto.getEmail());
-        usuario.setSenha(dto.getSenha());
+        usuario.setSenha(encoder.encode(dto.getSenha()));
         return usuario;
     }
 }
